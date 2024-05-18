@@ -1,0 +1,9 @@
+
+
+
+project name(mk_project_manager) : 		 project manager(Albert) 		 project status = Incomplete 
+ project resource name(laptop)  		 project resource status = some 		 project resource budget allocation = 10  
+ project task name(allow saving) 		 project task status = Complete  
+		 project task subtask name(import/export cms) 		 project task subtask status = Incomplete 		 project task subtask time = 30 minutes 
+
+
