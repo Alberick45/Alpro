@@ -1,3 +1,39 @@
+Projects = {}
+Eprojects = []
+
+def save_project(x):
+    with open("Project.txt", "a") as f:
+        f.write(x)
+
+
+def retrieve_project_list():
+    global Projects, Eprojects
+    Projects = {}
+    Eprojects = []
+
+    try:
+        with open("Project.txt", "r") as f:
+            reader = f.read().strip()
+            if reader == "":
+                Projects = {}
+            else:
+                pairs = reader.split(",")
+                for pair in pairs:
+                    print(pair)  # Debug print statement
+                    if ':' in pair:
+                        keys, values = pair.split(':', 1)  # Split only on the first colon
+                        keys = keys.strip()
+                        values = values.strip()
+                        values = values.split('+')
+                        values = [v.strip() for v in values]  # Strip each value
+                        Projects[keys] = values
+                Eprojects = list(Projects.keys())
+    except FileNotFoundError:
+        print("The file 'Project.txt' does not exist.")
+        Projects = {}
+        Eprojects = []
+
+
 
 class Project:
     def __init__(self, project_num, project_nm, projectmanager_nm, status="Incomplete"):
@@ -51,6 +87,16 @@ def create_new_project():
     pnum = input("Enter project number")
     sys_pn = f"{pn}_{pnum}"
     sys_pn = Project(pnum, pn, pm)
+    Projects[pnum] = [pn, pm]
+    save_project(f"{pnum}:{pn}+{pm},")
+
+
+def edit_project(name_of_project):
+    if Projects:
+        if name_of_project in Eprojects:
+            print("to retrieve projects")
+        else:
+            print("not existing will you like to create a new project")
 
 
 def add_resource():
@@ -81,10 +127,6 @@ def add_tasks():
         sys_tk_nm = Task(pnum, pn, pm, ptn,subtask_nm=pt, subtask_tm_alloc=int(ps))
 
 
-
-
-
-
 ## action = input("will you like to save(s),retrieve(r),or edit(e)").upper()
 
 # if action == "S":
@@ -96,17 +138,33 @@ def add_tasks():
 # else:
  #    print("choose an option")
 
-print("***************************Al pro***********************")
-print("Create new project(N)")
-print("Exit(E)")
-user_action1 = input("Enter your choice(N or E)")
-if user_action1 in {"N","E"}:
-    if user_action1 == "N":
-        create_new_project()
-    elif user_action1 == "E":
-        exit()
-else:
-    print("choose either new project(N) or exit(E)")
+
+def home():
+    print("***************************Al pro***********************")
+
+    def home_question():
+        print("Create new project(N)")
+        print("Exit(E)")
+        if not Projects:
+            user_action1 = input("Enter your choice(N or E)")
+        else:
+            print("edit existing(M)")
+            user_action1 = input("Enter your choice(N,E or M)")
+        return user_action1.upper()
+
+    user_answer = home_question()
+    print(user_answer)
+    if user_answer in {"N", "E", "M"}:
+        if user_answer == "N":
+            create_new_project()
+        elif user_answer == "E":
+            exit()
+        elif user_answer == "M":
+            up_nm = input("Enter name of project")
+            edit_project(up_nm)
+    else:
+        print("choose either new project(N) or exit(E) or edit(M)")
+        home()
 
 """
 project_name = sys_pn.project_nm
@@ -142,3 +200,6 @@ def retrieve():
 
 
 """
+
+retrieve_project_list()
+home()
