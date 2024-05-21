@@ -1,6 +1,4 @@
-koif="al_py"
-
-k,r=koif.split("_")
-print(k,r
-
-      )
+k= "app"
+M = {k:"OR", "CHR":"tri"}
+del(M[k])
+print(M)
